@@ -1,21 +1,21 @@
-import { HtmlWidget } from './widgets/html-widget.js';
-import { RssWidget } from './widgets/rss-widget.js';
+(function() {
+    App.WidgetRegistry = {
+        createWidget: (type, id, title, config) => {
+            let WidgetClass;
+            if (type === 'html') {
+                WidgetClass = App.Widgets.HtmlWidget;
+            } else if (type === 'rss') {
+                WidgetClass = App.Widgets.RssWidget;
+            }
 
-const registry = {
-    'html': HtmlWidget,
-    'rss': RssWidget
-};
+            if (!WidgetClass) {
+                throw new Error(`Unknown widget type: ${type}`);
+            }
+            return new WidgetClass(id, title, config);
+        },
 
-export const WidgetRegistry = {
-    createWidget: (type, id, title, config) => {
-        const WidgetClass = registry[type];
-        if (!WidgetClass) {
-            throw new Error(`Unknown widget type: ${type}`);
+        getAvailableTypes: () => {
+            return ['html', 'rss'];
         }
-        return new WidgetClass(id, title, config);
-    },
-
-    getAvailableTypes: () => {
-        return Object.keys(registry);
-    }
-};
+    };
+})();
