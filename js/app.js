@@ -77,11 +77,6 @@
         const addBtn = document.createElement('a');
         addBtn.className = 'waves-effect waves-light btn-add-widget';
         addBtn.innerHTML = '<i class="material-icons">add</i> Add Widget';
-        // Listener delegated or attached here. Let's delegate in setupEventListeners for consistency,
-        // OR just attach here since we are creating it. Attaching here is explicit.
-        // But to avoid duplication, I'll use the delegation approach in setupEventListeners
-        // effectively by triggering the modal logic.
-        // Actually, just calling a function is easier.
         addBtn.onclick = (e) => {
             e.preventDefault();
             openAddWidgetModal();
