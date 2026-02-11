@@ -179,10 +179,11 @@
             }
         });
 
-        // Add Widget Confirmation
+        // Add/Edit Widget Confirmation
         document.getElementById('confirm-add-widget').addEventListener('click', (e) => {
             const modal = document.getElementById('modal-add-widget');
             const type = modal.getAttribute('data-selected-type');
+            const widgetId = modal.getAttribute('data-widget-id');
             if (!type) return;
 
             const title = document.getElementById('widget-title').value.trim();
@@ -200,7 +201,16 @@
                 config.showDescription = document.getElementById('google-news-show-desc').checked;
             }
 
-            App.DashboardManager.addWidgetToCurrent(type, title, config);
+            if (widgetId) {
+                const activeDashboard = App.DashboardManager.getActiveDashboard();
+                if (activeDashboard) {
+                    App.DashboardManager.updateWidget(activeDashboard.id, widgetId, title, config);
+                }
+                modal.removeAttribute('data-widget-id');
+                document.getElementById('confirm-add-widget').textContent = 'Add';
+            } else {
+                App.DashboardManager.addWidgetToCurrent(type, title, config);
+            }
             renderWidgets();
         });
 
@@ -246,6 +256,43 @@
                 renderWidgets();
             }
         });
+
+        // Widget Edit (Event Delegation)
+        document.getElementById('dashboard-content').addEventListener('widget-edit', (e) => {
+            const widgetId = e.detail.widgetId;
+            const activeDashboard = App.DashboardManager.getActiveDashboard();
+            if (!activeDashboard) return;
+
+            const widget = activeDashboard.widgets.find(w => w.id === widgetId);
+            if (!widget) return;
+
+            openAddWidgetModal(widget.type);
+
+            const modalEl = document.getElementById('modal-add-widget');
+            modalEl.setAttribute('data-widget-id', widgetId);
+
+            // Update title to indicate editing
+            const typeLabel = widget.type === 'html' ? 'HTML Widget' : (widget.type === 'rss' ? 'RSS Feed' : 'Google News');
+            modalEl.querySelector('h4').textContent = `Edit ${typeLabel}`;
+            document.getElementById('confirm-add-widget').textContent = 'Save';
+
+            // Populate fields
+            document.getElementById('widget-title').value = widget.title || '';
+            M.updateTextFields(); // Materialize helper to update labels
+
+            if (widget.type === 'html') {
+                document.getElementById('html-content').value = widget.config.content || '';
+                M.textareaAutoResize(document.getElementById('html-content'));
+            } else if (widget.type === 'rss') {
+                document.getElementById('rss-url').value = widget.config.url || '';
+                document.getElementById('rss-max-items').value = widget.config.maxItems || '';
+                document.getElementById('rss-show-desc').checked = widget.config.showDescription !== false;
+            } else if (widget.type === 'google-news') {
+                document.getElementById('google-news-query').value = widget.config.query || '';
+                document.getElementById('google-news-max-items').value = widget.config.maxItems || '';
+                document.getElementById('google-news-show-desc').checked = widget.config.showDescription !== false;
+            }
+        });
     }
 
     function openAddWidgetModal(type) {
@@ -254,6 +301,10 @@
 
         // Store selected type
         modalEl.setAttribute('data-selected-type', type);
+
+        // Ensure we clear any previous edit state
+        modalEl.removeAttribute('data-widget-id');
+        document.getElementById('confirm-add-widget').textContent = 'Add';
 
         // Reset inputs
         document.getElementById('widget-title').value = '';
