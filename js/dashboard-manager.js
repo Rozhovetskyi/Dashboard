@@ -76,6 +76,20 @@
             return null;
         }
 
+        updateWidget(dashboardId, widgetId, title, config) {
+            const dashboard = this.state.dashboards.find(d => d.id === dashboardId);
+            if (dashboard) {
+                const widget = dashboard.widgets.find(w => w.id === widgetId);
+                if (widget) {
+                    widget.title = title;
+                    widget.config = config;
+                    this.save();
+                    return widget;
+                }
+            }
+            return null;
+        }
+
         removeWidget(dashboardId, widgetId) {
             const dashboard = this.state.dashboards.find(d => d.id === dashboardId);
             if (dashboard) {

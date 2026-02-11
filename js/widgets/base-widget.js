@@ -49,6 +49,29 @@
             };
             cardTitle.appendChild(deleteBtn);
 
+            // Edit button
+            const editBtn = document.createElement('button');
+            editBtn.className = 'btn-flat waves-effect waves-light right';
+            editBtn.style.padding = '0';
+            editBtn.style.margin = '0';
+            editBtn.style.width = '24px';
+            editBtn.style.height = '24px';
+            editBtn.style.lineHeight = '24px';
+            editBtn.style.minHeight = '0';
+            editBtn.style.backgroundColor = 'transparent';
+            editBtn.setAttribute('aria-label', `Edit ${this.title}`);
+
+            const editIcon = document.createElement('i');
+            editIcon.className = 'material-icons white-text';
+            editIcon.textContent = 'edit';
+            editBtn.appendChild(editIcon);
+
+            editBtn.onclick = () => {
+                const event = new CustomEvent('widget-edit', { detail: { widgetId: this.id }, bubbles: true });
+                col.dispatchEvent(event);
+            };
+            cardTitle.appendChild(editBtn);
+
             const widgetBody = document.createElement('div');
             widgetBody.className = 'widget-body';
 
