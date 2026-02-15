@@ -1,6 +1,6 @@
-# Dashboard
+# Dashboard for RSS, Google News, and HTML Widgets
 
-A lightweight, client-side dashboard application built with vanilla JavaScript and Materialize CSS.
+A lightweight, client-side dashboard application built with vanilla JavaScript and Materialize CSS, designed to aggregate and display content from RSS feeds, Google News searches, and custom HTML widgets.
 
 ## Demo
 
