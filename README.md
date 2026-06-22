@@ -2,10 +2,6 @@
 
 A lightweight, client-side dashboard application built with vanilla JavaScript and Materialize CSS, designed to aggregate and display content from RSS feeds, Google News searches, and custom HTML widgets.
 
-## Demo
-
-Check out the demo configuration here: [Live Demo](https://rozhovetskyi.github.io/Dashboard/demo)
-
 ## Features
 
 - **Multiple Dashboards**: Create and manage multiple thematic dashboards in tabs.
